@@ -106,7 +106,6 @@ namespace CostAgregator
                     Excel.Range range;
 
                     int rCnt = 0;
-                    int cCnt = 0;
 
                     xlApp = new Excel.Application();
                     xlWorkBook = xlApp.Workbooks.Open(listViewCash.Items[0].Text, 0, true, 5, "", "", true, Excel.XlPlatform.xlWindows, "\t", false, false, 0, true, 1, 0);
@@ -134,12 +133,6 @@ namespace CostAgregator
 
                     for (int i = 0; i < listViewTinkoff.Items.Count; i++)
                     {
-                        List<string> l = new List<string>();
-                        StreamReader sr = File.OpenText(listViewCash.Items[i].Text);
-                        while (!sr.EndOfStream)
-                        {
-                            l.Add(sr.ReadLine());
-                        }
                         foreach (var repLine in File.ReadAllLines(listViewTinkoff.Items[i].Text)
                             .Where(line => line.Split(new[] { ';' }).ElementAt(3).Replace("\"", "") == "OK"
                                 && Double.Parse(line.Split(new[] { ';' }).ElementAt(4).Replace("\"", "")) < 0)
@@ -165,6 +158,7 @@ namespace CostAgregator
                     var distCat = list.Select(item => item.category).Distinct().OrderBy(item => item);
 
                     int row = 1;
+                    double summarySum = 0;
 
                     foreach (var cat in distCat)
                     {
@@ -187,13 +181,28 @@ namespace CostAgregator
                             row++;
                         }
                         xlWorkSheetReport.Cells[headerRow, 3] = headerSum;
+                        Excel.Range ran = xlWorkSheetReport.Cells[headerRow, 3];
+                        ran.Font.Bold = true;
+                        summarySum += headerSum;
+                        if (cat == distCat.Last())
+                        {
+                            xlWorkSheetReport.Cells[row, 1] = "ИТОГО";
+                            xlWorkSheetReport.Cells[row, 3] = summarySum;
+                            (xlWorkSheetReport.Cells[row, 3]).Font.Bold = true;
+                        }
                     }
+
+                    Excel.Range r = xlWorkSheetReport.Range["B:B"];
+                    r.EntireColumn.ColumnWidth = 20;
 
                     string path = Directory.GetCurrentDirectory() + "\\" + DateTime.Now.ToLongDateString().Replace(":", "_") + ".xlsx";
                     if (File.Exists(path))
                         File.Delete(path);
                     xlWorkBookReport.SaveAs(Filename: path);
                     MessageBox.Show("Отчет " + path + " успешно создан");
+
+                    xlWorkBookReport.Close();
+                    xlAppReport.Quit();
 
                     releaseObject(xlWorkSheetReport);
                     releaseObject(xlWorkBookReport);
