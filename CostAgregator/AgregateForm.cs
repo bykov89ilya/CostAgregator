@@ -200,6 +200,8 @@ namespace CostAgregator
                     Excel.Range r = xlWorkSheetReport.Range["B:B"];
                     r.EntireColumn.ColumnWidth = 20;
 
+                    xlWorkSheetReport.Outline.SummaryRow = Excel.XlSummaryRow.xlSummaryAbove;
+
                     string path = Directory.GetCurrentDirectory() + "\\" + DateTime.Now.ToLongDateString().Replace(":", "_") + ".xlsx";
                     if (File.Exists(path))
                         File.Delete(path);
