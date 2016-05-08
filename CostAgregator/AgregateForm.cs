@@ -184,6 +184,11 @@ namespace CostAgregator
                         Excel.Range ran = xlWorkSheetReport.Cells[headerRow, 3];
                         ran.Font.Bold = true;
                         summarySum += headerSum;
+
+                        Excel.Range ranToGroup = xlWorkSheetReport.Range[xlWorkSheetReport.Rows[headerRow + 1],
+                            xlWorkSheetReport.Rows[row-1]];
+                        ranToGroup.Group();
+
                         if (cat == distCat.Last())
                         {
                             xlWorkSheetReport.Cells[row, 1] = "ИТОГО";
