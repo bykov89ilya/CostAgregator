@@ -26,7 +26,7 @@ namespace CostAgregator
             Stream streamTinkoff = null;
             OpenFileDialog openFileDialogTinkoff = new OpenFileDialog();
 
-            openFileDialogTinkoff.InitialDirectory = "c:\\";
+            openFileDialogTinkoff.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
             openFileDialogTinkoff.Filter = "csv files (*.csv)|*.csv";
             openFileDialogTinkoff.FilterIndex = 1;
             openFileDialogTinkoff.RestoreDirectory = true;
@@ -61,7 +61,7 @@ namespace CostAgregator
             Stream streamCash = null;
             OpenFileDialog openFileDialogCash = new OpenFileDialog();
 
-            openFileDialogCash.InitialDirectory = "c:\\";
+            openFileDialogCash.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
             openFileDialogCash.Filter = "xls files (*.xls)|*.xls";
             openFileDialogCash.FilterIndex = 1;
             openFileDialogCash.RestoreDirectory = true;
@@ -133,7 +133,7 @@ namespace CostAgregator
 
                     for (int i = 0; i < listViewTinkoff.Items.Count; i++)
                     {
-                        foreach (var repLine in File.ReadAllLines(listViewTinkoff.Items[i].Text)
+                        foreach (var repLine in File.ReadAllLines(listViewTinkoff.Items[i].Text, Encoding.GetEncoding(1251))
                             .Where(line => line.Split(new[] { ';' }).ElementAt(3).Replace("\"", "") == "OK"
                                 && Double.Parse(line.Split(new[] { ';' }).ElementAt(4).Replace("\"", "")) < 0)
                             )
@@ -155,7 +155,7 @@ namespace CostAgregator
                     xlWorkBookReport = xlAppReport.Workbooks.Add();
                     Excel.Worksheet xlWorkSheetReport = xlWorkBookReport.Worksheets[1];
 
-                    var distCat = list.Select(item => item.category).Distinct().OrderBy(item => item);
+                    var distCat = list.Select(item => item.category).Where(item => item != "Наличные").Distinct().OrderBy(item => item);
 
                     int row = 1;
                     double summarySum = 0;
