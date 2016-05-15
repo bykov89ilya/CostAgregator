@@ -155,7 +155,9 @@ namespace CostAgregator
                     xlWorkBookReport = xlAppReport.Workbooks.Add();
                     Excel.Worksheet xlWorkSheetReport = xlWorkBookReport.Worksheets[1];
 
-                    var distCat = list.Select(item => item.category).Where(item => item != "Наличные").Distinct().OrderBy(item => item);
+                    var distCat = list.Select(item => item.category)
+                        .Where(item => item != "Наличные" && item != "Переводы")
+                        .Distinct().OrderBy(item => item);
 
                     int row = 1;
                     double summarySum = 0;
