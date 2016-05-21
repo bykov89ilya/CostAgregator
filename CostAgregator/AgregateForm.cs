@@ -220,7 +220,6 @@ namespace CostAgregator
                 else
                 {
                     MessageBox.Show("Количество отчетов Наличка не равно одному или количество отчетов Тинькофф не равно 1 или 2");
-                    var n = 9;
                 }
             }
             catch (Exception ex)
