@@ -173,6 +173,7 @@ namespace CostAgregator
                         int headerRow = row;
                         double headerSum = 0;
                         xlWorkSheetReport.Cells[row, 1] = cat.ToString();
+                        (xlWorkSheetReport.Cells[row, 1]).Font.Bold = true;
                         row++;
                         foreach (var el in catList)
                         {
@@ -194,8 +195,15 @@ namespace CostAgregator
                         if (cat == distCat.Last())
                         {
                             xlWorkSheetReport.Cells[row, 1] = "ИТОГО";
+                            (xlWorkSheetReport.Cells[row, 1]).Font.Bold = true;
                             xlWorkSheetReport.Cells[row, 3] = summarySum;
                             (xlWorkSheetReport.Cells[row, 3]).Font.Bold = true;
+
+                            xlWorkSheetReport.Cells[row, 4] = "БЕЗ КВАРПЛАТЫ";
+                            xlWorkSheetReport.Cells[row, 5] = summarySum - list
+                                .Where(item => item.category == "КварПлата")
+                                .Select(item => item.value).First();
+                            (xlWorkSheetReport.Cells[row, 5]).Font.Bold = true;
                         }
                     }
 
