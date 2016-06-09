@@ -202,7 +202,7 @@ namespace CostAgregator
                             xlWorkSheetReport.Cells[row, 4] = "БЕЗ КВАРПЛАТЫ";
                             xlWorkSheetReport.Cells[row, 5] = summarySum - list
                                 .Where(item => item.category == "КварПлата")
-                                .Select(item => item.value).First();
+                                .Select(item => item.value).FirstOrDefault();
                             (xlWorkSheetReport.Cells[row, 5]).Font.Bold = true;
                         }
                     }
